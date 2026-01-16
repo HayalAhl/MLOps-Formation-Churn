@@ -1,0 +1,158 @@
+<!-- fait avec chatgpt -->
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Prédiction de Churn</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Segoe UI", Tahoma, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(
+                rgba(255, 255, 255, 0.85),
+                rgba(255, 255, 255, 0.85)
+            ),
+            url("https://images.unsplash.com/photo-1490750967868-88aa4486c946");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px 40px;
+            border-radius: 20px;
+            width: 360px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            text-align: center;
+        }
+
+        h1 {
+            color: #4b6f44;
+            margin-bottom: 10px;
+        }
+
+        p.subtitle {
+            color: #6b8f71;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-top: 12px;
+            color: #4b6f44;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border-radius: 10px;
+            border: 1px solid #cfd8cf;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #7ba87b;
+        }
+
+        button {
+            margin-top: 25px;
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #7ba87b, #a3c9a8);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #4b6f44;
+        }
+
+        .flower {
+            font-size: 22px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="flower">🌸🌿🌼</div>
+        <h1>Prédiction Churn</h1>
+        <p class="subtitle">Analyse client en douceur florale</p>
+
+        <form id="churnForm">
+            <label>Âge</label>
+            <input type="number" name="Age" required>
+
+            <label>Account Manager (0 ou 1)</label>
+            <input type="number" name="Account_Manager" required>
+
+            <label>Années comme client</label>
+            <input type="number" step="0.1" name="Years" required>
+
+            <label>Nombre de sites</label>
+            <input type="number" name="Num_Sites" required>
+
+            <button type="submit">🌺 Prédire le Churn</button>
+        </form>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById("churnForm");
+        const resultDiv = document.getElementById("result");
+
+        form.addEventListener("submit", function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(form);
+
+            fetch("/predict", {
+                method: "POST",
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.churn_prediction !== undefined) {
+                    resultDiv.innerHTML =
+                        data.churn_prediction === 1
+                        ? "⚠️ Risque de churn détecté"
+                        : "✅ Client fidèle 🌷";
+                } else {
+                    resultDiv.innerHTML = "❌ Erreur : " + data.error;
+                }
+            })
+            .catch(err => {
+                resultDiv.innerHTML = "❌ Erreur serveur";
+            });
+        });
+    </script>
+
+</body>
+</html>
