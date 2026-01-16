@@ -1,7 +1,7 @@
 
 import pandas as pd
 import joblib
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression  
 
 
 data = pd.read_csv('data/train_data.csv')
